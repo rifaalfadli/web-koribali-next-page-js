@@ -1,0 +1,53 @@
+// pages/_document.js
+import { Html, Head, Main, NextScript } from "next/document";
+
+export default function Document() {
+  return (
+    <Html lang="id">
+      <Head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="description"
+          content="CV. KORI BALI adalah perusahaan konstruksi dan perhitungan pole berpengalaman internasional."
+        />
+        <meta name="theme-color" content="#0d3b66" />
+        <link rel="icon" href="/favicon.ico" />
+
+        <title>CV. KORI BALI</title>
+
+        {/* Google Fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto&display=swap"
+          rel="stylesheet"
+        />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="CV. KORI BALI" />
+        <meta
+          property="og:description"
+          content="Perusahaan konstruksi dan perhitungan pole berpengalaman internasional."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/favicon.ico" />
+      </Head>
+      <body>
+        <noscript>
+          Harap aktifkan JavaScript untuk menjalankan aplikasi ini.
+        </noscript>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+}

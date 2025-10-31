@@ -1,0 +1,176 @@
+/* ===== PROFILE SECTION ===== */
+.profileSection {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Avatar User */
+.profileAvatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  object-fit: cover;
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(to right, #0d3b66, #1e6091);
+  transition: all 0.25s ease;
+}
+
+.profileAvatar:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 10px rgba(13, 59, 102, 0.3);
+}
+
+/* ===== PROFILE POPUP ===== */
+.profilePopup {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  width: 220px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  padding: 1.2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 20;
+  animation: fadeIn 0.25s ease-out;
+  border: 1px solid #e5e5e5; /* garis halus untuk tepi */
+}
+
+/* segitiga kecil di atas popup */
+.profilePopup::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: 22px;
+  width: 14px;
+  height: 14px;
+  background: #ffffff; /* putih solid */
+  transform: rotate(45deg);
+  border-top: 1px solid #e5e5e5;
+  border-left: 1px solid #e5e5e5;
+}
+
+/* ===== FOTO PROFILE DALAM POPUP ===== */
+.profilePopupImg {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.6em;
+  border: 2px solid #0d3b66;
+}
+
+/* ===== USERNAME ===== */
+.profileUsername {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1em;
+  margin-bottom: 0.8em;
+  color: #0d3b66;
+}
+
+/* ===== ACTION AREA (Profile, Logout) ===== */
+.profilePopupActions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* tombol di tengah */
+  gap: 0.6em;
+}
+
+/* Tombol Profile */
+.profileLink {
+  text-align: center;
+  padding: 0.55em 0;
+  border-radius: 10px;
+  width: 100%;
+  background: linear-gradient(135deg, #0d3b66, #3399cc);
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.profileLink:hover {
+  background: linear-gradient(135deg, #3399cc, #0d3b66);
+  transform: translateY(-2px);
+}
+
+/* Tombol Logout */
+/* .profile-popup-actions button {
+  width: 100%;
+  background: none;
+  border: 2px solid #0d3b66;
+  color: #0d3b66;
+  padding: 0.5em 0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.profile-popup-actions button:hover {
+  background: #0d3b66;
+  color: white;
+  transform: translateY(-2px);
+} */
+
+/* ===== Animasi popup muncul ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tooltip di samping avatar */
+.profileTooltip {
+  position: absolute;
+  top: calc(100% + 8px); /* muncul sedikit di bawah lingkaran */
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(to right, #0d3b66, #1e6091);
+  color: white;
+  font-size: 0.85em;
+  padding: 6px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  animation: slideUp 0.25s forwards ease-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.profileTooltip::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(to right, #0d3b66, #1e6091);
+}
+
+/* Animasi tooltip muncul */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 5px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}

@@ -1,0 +1,328 @@
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3em 0em;
+  background: #f9fafb;
+}
+
+.profile-card {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 2em 3em;
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ========== MODE EDIT STATE ========== */
+.profile-card-edit {
+  background: linear-gradient(to bottom right, #ffffff, #f0f8ff);
+  transform: scale(1.01);
+  transition: all 0.4s ease;
+  box-shadow: 0 0 20px rgba(13, 59, 102, 0.3), 0 0 40px rgba(13, 59, 102, 0.15);
+  border: 2px solid rgba(13, 59, 102, 0.4);
+}
+
+/* Animasi halus saat masuk/keluar mode edit */
+.profile-card {
+  transition: all 0.4s ease;
+}
+
+/* ========================== PROFILE CARD COLOR STATES ========================== */
+.profile-card-valid {
+  box-shadow: 0 0 25px rgba(22, 163, 74, 0.4), 0 0 50px rgba(22, 163, 74, 0.15);
+  border: 2px solid rgba(22, 163, 74, 0);
+}
+
+.profile-card-error {
+  box-shadow: 0 0 25px rgba(225, 29, 72, 0.4), 0 0 50px rgba(225, 29, 72, 0.15);
+  border: 2px solid rgba(225, 29, 72, 0.5);
+}
+
+/* ========================== INPUT COLOR STATES ========================== */
+.input-green {
+  border-color: #16a34a !important;
+  box-shadow: 0 0 8px rgba(22, 163, 74, 0.4);
+}
+
+.profile-photo-section {
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+.profile-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #0d3b66;
+  box-shadow: 0 3px 8px rgba(13, 59, 102, 0.2);
+}
+
+.photo-upload-btn {
+  display: inline-block;
+  margin-top: 10px;
+  background: linear-gradient(to right, #0d3b66, #3399cc);
+  color: #fff;
+  padding: 0.4em 1.2em;
+  border-radius: 8px;
+  font-size: 0.85em;
+  cursor: pointer;
+  position: relative;
+}
+
+.photo-upload-btn:hover {
+  background: linear-gradient(135deg, #3399cc, #0d3b66);
+  transform: translateY(-1px);
+}
+
+.photo-upload-btn input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+
+.profile-info {
+  width: 100%;
+}
+
+.info-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
+
+.info-row label {
+  font-weight: 600;
+  color: #0d3b66;
+  margin-bottom: 0.3em;
+}
+
+.info-row p {
+  background: #f3f4f6;
+  padding: 0.7em;
+  border-radius: 8px;
+  color: #333;
+}
+
+/* .info-row input {
+  padding: 0.6em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.2s;
+} */
+
+/* .info-row input:focus {
+  border-color: #3399cc;
+  box-shadow: 0 0 4px rgba(51, 153, 204, 0.4);
+} */
+
+.profile-buttons {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  margin-top: 1.5em;
+}
+
+.button-profile {
+  padding: 0.6em 1.4em;
+  border-radius: 10px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-edit {
+  background: linear-gradient(to right, #0d3b66, #3399cc);
+  color: white;
+}
+
+.btn-edit:hover {
+  transform: scale(1.05);
+}
+
+.btn-save {
+  background: #16a34a;
+  color: white;
+}
+
+.btn-save:hover {
+  background: #15803d;
+}
+
+.btn-cancel {
+  background: #e5e7eb;
+  color: #333;
+}
+
+.btn-cancel:hover {
+  background: #d1d5db;
+}
+
+.profile-loading {
+  text-align: center;
+  margin-top: 100px;
+  color: #555;
+  font-size: 1.2em;
+}
+
+/* ========== FULL IMAGE PREVIEW ========== */
+.image-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.image-popup {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  animation: scaleIn 0.3s ease;
+}
+
+.image-full {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Animasi lembut */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* ========== INPUT FIELD ========== */
+.input-field {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.9rem 1.2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  outline: none;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  background-color: #fafafa;
+}
+
+.input-field:hover {
+  border-color: #0d3b66;
+  background-color: #f0f7ff;
+}
+
+.input-field:focus {
+  border-color: #0d3b66;
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(13, 59, 102, 0.35);
+  transform: scale(1.02);
+}
+
+.input-field {
+  transition: all 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* ===== READONLY STATE (tidak interaktif sama sekali) ===== */
+.input-field.readonly {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  cursor: default;
+  pointer-events: none;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Pastikan tidak ada efek hover/focus */
+.input-field.readonly:hover,
+.input-field.readonly:focus {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* ========== ERROR CONTAINER (ALWAYS PRESENT) ========== */
+.error-container {
+  min-height: 1.2rem; /* always reserve space */
+  text-align: left;
+  padding-left: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.error-text {
+  color: #e11d48; /* red-600 */
+  font-size: 0.8rem;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: all 0.3s ease;
+}
+
+.error-container:has(.error-text) .error-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ======= ERROR STYLE ======= */
+.input-error {
+  border-color: #e11d48 !important;
+  background-color: #fff5f5;
+  box-shadow: 0 0 6px rgba(225, 29, 72, 0.3);
+  transition: all 0.3s ease;
+}
+
+.input-error:focus {
+  border-color: #be123c !important;
+  box-shadow: 0 0 10px rgba(190, 18, 60, 0.5);
+}
+
+/* Shake Animation*/
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+/* Terapkan animasi hanya ketika field error */
+.shake {
+  animation: shake 0.4s ease;
+}
