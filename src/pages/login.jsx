@@ -4,27 +4,26 @@ import Link from "next/link";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, X, CheckCircle, AlertCircle } from "lucide-react";
 import Head from "next/head";
 import styles from "@/assets/styles/registerLogin.module.css";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState(null); // untuk pesan sukses/error
+  const [messageType, setMessageType] = useState(""); // "success" atau "error"
   const router = useRouter();
 
-  // Validasi form pakai Yup
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid Email").required("Email is required"),
-    password: Yup.string().required("Password is required"),
+    email: Yup.string().email("*Invalid Email").required("*Email is required"),
+    password: Yup.string().required("*Password is required"),
   });
 
-  // Fungsi submit login
   const handleLogin = async (values, { resetForm }) => {
     try {
       const res = await fetch("http://localhost:5000/anggota");
       const users = await res.json();
 
-      // Cek apakah user dengan email & password cocok
       const foundUser = users.find(
         (u) =>
           u.email === values.email.trim() &&
@@ -32,22 +31,30 @@ export default function Login() {
       );
 
       if (foundUser) {
-        alert("Login successful!");
+        setMessageType("success");
+        setMessage("Login successful!");
         Cookies.set("user", JSON.stringify({ id: foundUser.id }), {
           expires: 1,
         });
-        // Flag untuk animasi beranda
         sessionStorage.setItem("showTransition", "true");
 
         resetForm();
-        router.push("/");
+
+        // Redirect setelah 2 detik agar user sempat lihat pesan
+        setTimeout(() => router.push("/"), 2000);
       } else {
-        alert("Email or password is incorrect!");
+        setMessageType("error");
+        setMessage("Email or password is incorrect!");
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("An error occurred during login.");
+      setMessageType("error");
+      setMessage("An error occurred during login.");
     }
+  };
+
+  const closeMessage = () => {
+    setMessage(null);
   };
 
   return (
@@ -59,6 +66,36 @@ export default function Login() {
       <div className={styles["begin-page"]}>
         <div className={styles["begin-card"]}>
           <h1 className={styles["begin-title"]}>Welcome Back!</h1>
+
+          {/* Kotak pesan notifikasi */}
+          {message && (
+            <div
+              className={`${styles["message-box"]} ${
+                messageType === "error"
+                  ? styles["message-error"]
+                  : styles["message-success"]
+              }`}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                {messageType === "error" && <AlertCircle size={20} />}
+                <span>{message}</span>
+              </div>
+
+              {messageType === "error" ? (
+                <button
+                  className={styles["message-close"]}
+                  onClick={closeMessage}
+                >
+                  <X size={20} />
+                </button>
+              ) : (
+                <CheckCircle size={20} />
+              )}
+            </div>
+          )}
+
           <Formik
             initialValues={{ email: "", password: "" }}
             validationSchema={LoginSchema}
@@ -145,7 +182,6 @@ export default function Login() {
                   </Field>
                 </div>
 
-                {/* Tombol Submit */}
                 <button
                   type="submit"
                   disabled={isSubmitting}

@@ -43,7 +43,7 @@ export default function StrukturPegawai({ anggota }) {
   const dev = anggota.filter((a) => a.divisi === "Development");
 
   return (
-    <>
+    <div className="page-wrapper">
       <Head>
         <title>Struktur Pegawai - CV. KORI BALI</title>
         <meta
@@ -59,7 +59,7 @@ export default function StrukturPegawai({ anggota }) {
         <DivisiTable id="yp" title="Divisi YP" data={yp} />
         <DivisiTable id="development" title="Divisi Development" data={dev} />
       </main>
-    </>
+    </div>
   );
 }
 
@@ -73,7 +73,7 @@ export async function getServerSideProps() {
     if (!res.ok) throw new Error("Gagal ambil data anggota");
     const anggota = await res.json();
 
-    // Kirim hanya data aman (tapi tetap include id)
+    // Kirim hanya data aman
     const safeData = anggota.map(({ fullname, email, divisi }) => ({
       fullname,
       email,

@@ -1,4 +1,5 @@
-import { Field, Formik, Form, ErrorMessage } from "formik";
+import { Field, Formik, Form } from "formik";
+import { X, CheckCircle, AlertCircle } from "lucide-react";
 import * as Yup from "yup";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
@@ -13,9 +14,14 @@ export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [originalUser, setOriginalUser] = useState(null);
 
+  // State untuk pesan sukses/error
+  const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+
   // State untuk menandai apakah dalam mode edit atau tidak
   const [editMode, setEditMode] = useState(false);
-  const [allValid, setAllValid] = useState(false);
+  // NOTE: allValid state dihapus — kita akan compute secara langsung di render
 
   // State untuk menampung preview foto baru (base64) dan menampilkan foto penuh
   const [photoState, setPhotoState] = useState({
@@ -34,7 +40,7 @@ export default function ProfilePage() {
         if (input) input.focus();
       }, 0);
     }
-  }, [editMode, user, allValid]);
+  }, [editMode, user, lastFocus]); // dependency updated: remove allValid, add lastFocus
 
   // Fungsi untuk toggle foto besar
   const toggleFullImage = () =>
@@ -124,23 +130,34 @@ export default function ProfilePage() {
       if (!res.ok) {
         const errorText = await res.text();
         console.error("Server error:", errorText);
-        alert("Failed to update profile! Server said: " + errorText);
+
+        setMessageType("error");
+        setMessage("Failed to update profile! Server said: " + errorText);
         return;
       }
 
       const savedUser = await res.json();
       setUser(savedUser);
       setOriginalUser(savedUser);
-      setEditMode(false);
       setPhotoState((prev) => ({ ...prev, preview: null }));
 
-      alert("Profile updated successfully!");
+      setMessageType("success");
+      // Tampilkan pop-up success
+      setShowPopup(true);
+
+      setTimeout(() => {
+        setEditMode(false);
+        setShowPopup(false);
+      }, 1000);
     } catch (err) {
       console.error("Update failed:", err);
-      alert("Error updating profile!");
-    } finally {
-      setEditMode(false);
+      setMessageType("error");
+      setMessage("Error updating profile!");
     }
+  };
+
+  const closeMessage = () => {
+    setMessage(null);
   };
 
   // Tampilkan pesan loading jika data belum tersedia
@@ -171,7 +188,7 @@ export default function ProfilePage() {
           {({ field, meta }) => (
             <div
               className={`${styles["form-group"]} ${
-                meta.touched && meta.error ? styles["shake"] : ""
+                errors[name] ? styles["shake"] : ""
               }`}
             >
               <label>{label}</label>
@@ -187,12 +204,27 @@ export default function ProfilePage() {
                 )}
               />
 
+              {/* Error Message */}
               <div className={styles["error-container"]}>
-                <ErrorMessage
-                  name={name}
-                  component="div"
-                  className={styles["error-text"]}
-                />
+                {/* Error Message — tampil realtime */}
+                {errors[name] && (
+                  <div className={styles["error-text"]}>
+                    <AlertCircle size={14} strokeWidth={2.5} />
+                    {errors[name]}
+                  </div>
+                )}
+
+                {/* Success Message */}
+                {!errors[name] && isChanged && (
+                  <div
+                    className={`${styles["success-container"]} ${styles["active"]}`}
+                  >
+                    <div className={styles["success-text"]}>
+                      <CheckCircle size={14} strokeWidth={2.5} />
+                      Verified
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -202,7 +234,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <>
+    <div className="page-wrapper">
       <Head>
         <title>Profil Pengguna - CV. KORI BALI</title>
         <meta
@@ -211,6 +243,15 @@ export default function ProfilePage() {
         />
       </Head>
 
+      {showPopup && (
+        <div className={styles["popup-overlay"]}>
+          <div className={styles["popup-box"]}>
+            <CheckCircle size={40} color="#2e7d32" />
+            <p>Profile updated successfully!</p>
+          </div>
+        </div>
+      )}
+
       <Hero title="My Profile" />
       <Breadcrumb page="Profile" />
 
@@ -218,12 +259,6 @@ export default function ProfilePage() {
         <div
           className={`${styles["profile-card"]} ${
             editMode ? styles["profile-card-edit"] : ""
-          } ${
-            allValid === "green"
-              ? styles["profile-card-valid"]
-              : allValid === "red"
-              ? styles["profile-card-error"]
-              : ""
           }`}
         >
           <div className={styles["profile-photo-section"]}>
@@ -246,6 +281,26 @@ export default function ProfilePage() {
             )}
           </div>
 
+          {/* Kotak pesan notifikasi */}
+          {message && messageType === "error" && (
+            <div
+              className={`${styles["message-box"]} ${styles["message-error"]}`}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                <AlertCircle size={20} />
+                <span>{message}</span>
+              </div>
+              <button
+                className={styles["message-close"]}
+                onClick={closeMessage}
+              >
+                <X size={20} />
+              </button>
+            </div>
+          )}
+
           <Formik
             enableReinitialize
             initialValues={{
@@ -267,12 +322,14 @@ export default function ProfilePage() {
                   phoneNumber: user.phoneNumber || "",
                 });
 
-              useEffect(() => {
-                if (!editMode) return setAllValid(false);
-                if (!hasChanges) setAllValid("blue");
-                else if (Object.keys(errors).length > 0) setAllValid("red");
-                else setAllValid("green");
-              }, [values, errors, editMode]);
+              // compute allValid (derived) — tidak menggunakan state atau useEffect
+              const allValid = !editMode
+                ? false
+                : !hasChanges
+                ? "blue"
+                : Object.keys(errors).length > 0
+                ? "red"
+                : "green";
 
               return (
                 <Form className={styles["profile-info"]}>
@@ -322,7 +379,7 @@ export default function ProfilePage() {
                               preview: null,
                             }));
                             resetForm({ values: originalUser });
-                            setAllValid(false);
+                            // removed setAllValid(false);
                           }}
                         >
                           Cancel
@@ -372,6 +429,6 @@ export default function ProfilePage() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

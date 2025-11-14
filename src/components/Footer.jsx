@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Instagram, Linkedin, Twitter, Youtube, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -6,15 +7,16 @@ export default function Footer() {
       <div className="footer-top container">
         <div className="footer-brand">
           <div className="footer-brand-container">
-            <Link href="/">
+            {/* Logo Kori Bali */}
+            <Link href="/" className="logo-koribali-box">
               <img
                 src="/images/logo-koribali.png"
                 alt="logo koribali"
-                width="100px"
                 className="footer-logo-kb"
               />
             </Link>
 
+            {/* Mitra Utama */}
             <div className="footer-mitra">
               <h3>Mitra Utama:</h3>
               <div className="mitra-logo">
@@ -22,6 +24,7 @@ export default function Footer() {
                   href="https://www.ypole.co.jp/english/"
                   target="_blank"
                   rel="noreferrer"
+                  className="mitra-box"
                 >
                   <img src="/images/logo-yp.png" alt="logo yoshimoto pole" />
                 </Link>
@@ -29,6 +32,7 @@ export default function Footer() {
                   href="https://www.yspole.co.jp/index.html"
                   target="_blank"
                   rel="noreferrer"
+                  className="mitra-box"
                 >
                   <img src="/images/logo-ys.png" alt="logo ys pole" />
                 </Link>
@@ -36,25 +40,24 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* Sosial Media */}
           <div className="sosmed-icons">
-            <Link href="#">
-              <img src="/images/instagram-logo.svg" alt="icon ig" />
+            <Link href="#" className="icon-box ig">
+              <Instagram />
             </Link>
-            <Link href="#">
-              <img src="/images/linkedin-logo.svg" alt="icon linkedin" />
+            <Link href="#" className="icon-box">
+              <Linkedin />
             </Link>
-            <Link href="#">
-              <img src="/images/twitter-logo.svg" alt="icon twitter" />
+            <Link href="#" className="icon-box">
+              <Twitter />
             </Link>
-            <Link href="#">
-              <img src="/images/tiktok-logo.svg" alt="icon tiktok" />
-            </Link>
-            <Link href="#">
-              <img src="/images/youtube-logo.svg" alt="icon youtube" />
+            <Link href="#" className="icon-box yt">
+              <Youtube />
             </Link>
           </div>
         </div>
 
+        {/* Footer Links */}
         <div className="footer-links">
           <ul>
             <li>
@@ -100,10 +103,16 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* Footer Bottom */}
       <div className="footer-bottom">
-        <p>
-          Have questions or feedback? Email us at{" "}
-          <Link href="mailto:cv.koribali@gmail.com">cv.koribali@gmail.com</Link>
+        <p className="footer-email">
+          <Mail className="mail-icon" />
+          <span>
+            Have questions or feedback? Email us at{" "}
+            <Link href="mailto:cv.koribali@gmail.com">
+              cv.koribali@gmail.com
+            </Link>
+          </span>
         </p>
         <p>&copy; 2025 CV. KORI BALI. All rights reserved.</p>
       </div>

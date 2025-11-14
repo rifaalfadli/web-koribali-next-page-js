@@ -3,32 +3,35 @@ import Link from "next/link";
 import * as Yup from "yup";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, X, CheckCircle, AlertCircle } from "lucide-react";
 import Head from "next/head";
 import styles from "@/assets/styles/registerLogin.module.css";
 
 function Register() {
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState(null); // untuk pesan sukses/error
+  const [messageType, setMessageType] = useState(""); // "success" atau "error"
+  const [showPopup, setShowPopup] = useState(false);
   const router = useRouter();
 
   // Validation schema using Yup
   const RegisterSchema = Yup.object().shape({
     fullname: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Name is required"),
-    email: Yup.string().email("Invalid Email").required("Email is required"),
+      .min(2, "*Too Short!")
+      .max(50, "*Too Long!")
+      .required("*Name is required"),
+    email: Yup.string().email("*Invalid Email").required("*Email is required"),
     phoneNumber: Yup.string()
-      .matches(/^[0-9]+$/, "Phone number must contain only digits")
-      .min(10, "Phone number must be at least 10 digits")
-      .max(15, "Phone number can't be longer than 15 digits")
-      .required("Phone Number is required"),
+      .matches(/^[0-9]+$/, "*Phone number must contain only digits")
+      .min(10, "*Phone number must be at least 10 digits")
+      .max(15, "*Phone number can't be longer than 15 digits")
+      .required("*Phone Number is required"),
     password: Yup.string()
-      .required("Password is required")
-      .min(8, "Min 8 chars")
-      .matches(/[a-z]/, "Must contain lowercase")
-      .matches(/[A-Z]/, "Must contain uppercase")
-      .matches(/\d/, "Must contain number"),
+      .required("*Password is required")
+      .min(8, "*Min 8 chars")
+      .matches(/[a-z]/, "*Must contain lowercase")
+      .matches(/[A-Z]/, "*Must contain uppercase")
+      .matches(/\d/, "*Must contain number"),
   });
 
   const handleRegister = async (item, { resetForm }) => {
@@ -44,7 +47,8 @@ function Register() {
       );
 
       if (isDuplicate) {
-        alert("Name, email, or phone number already exists!");
+        setMessageType("error");
+        setMessage("Name, email, or phone number already exists!");
         return;
       }
 
@@ -62,15 +66,26 @@ function Register() {
       if (!response.ok) throw new Error("Failed to register");
 
       const data = await response.json();
-      alert("Register successful! Please log in");
+      setMessageType("success");
       console.log("Register success:", data);
 
+      // Tampilkan pop-up success
+      setShowPopup(true);
       resetForm();
-      router.push("/login");
+
+      // Setelah 3 detik, redirect ke login
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
     } catch (error) {
       console.error("Register failed:", error);
-      alert("An error occurred during registration.");
+      setMessageType("error");
+      setMessage("An error occurred during registration.");
     }
+  };
+
+  const closeMessage = () => {
+    setMessage(null);
   };
 
   return (
@@ -80,8 +95,38 @@ function Register() {
         <meta name="description" content="Register Page CV. KORI BALI" />
       </Head>
       <div className={styles["begin-page"]}>
+        {showPopup && (
+          <div className={styles["popup-overlay"]}>
+            <div className={styles["popup-box"]}>
+              <CheckCircle size={40} color="#2e7d32" />
+              <p>Registration successful! Redirecting you to login...</p>
+            </div>
+          </div>
+        )}
+
         <div className={styles["begin-card"]}>
           <h1 className={styles["begin-title"]}>Create Your Account</h1>
+
+          {/* Kotak pesan notifikasi */}
+          {message && messageType === "error" && (
+            <div
+              className={`${styles["message-box"]} ${styles["message-error"]}`}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                <AlertCircle size={20} />
+                <span>{message}</span>
+              </div>
+              <button
+                className={styles["message-close"]}
+                onClick={closeMessage}
+              >
+                <X size={20} />
+              </button>
+            </div>
+          )}
+
           <Formik
             initialValues={{
               fullname: "",

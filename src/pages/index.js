@@ -20,7 +20,7 @@ export default function Beranda() {
     }
   }, []);
   return (
-    <>
+    <div className="page-wrapper">
       {/* Tampilkan animasi di atas semua */}
       {showTransition &&
         typeof document !== "undefined" &&
@@ -151,6 +151,6 @@ export default function Beranda() {
           </div>
         </section>
       </main>
-    </>
+    </div>
   );
 }
